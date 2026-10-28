@@ -206,7 +206,8 @@ canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:7}
       <h1>Thank you, <em id="thx">tester</em>!</h1>
       <p class="sub">Your feedback went straight to the founder. You're one of the first people to try this, and it shapes what we build next.</p>
       <div class="stats"><div><b id="fxp">0</b>XP earned</div><div><b id="flv">3</b>Level</div><div><b id="ftime">0s</b>Your time</div></div>
-      <button class="ghost" id="again">Submit another response</button>
+      <p class="sub" id="sendst" style="font-size:13px;font-weight:700;color:var(--gold)"></p>
+      <button class="ghost" id="again">Next person? Start a fresh quest</button>
     </section>
   </main>
   <p class="foot">Promethia · promethia.live &nbsp;·&nbsp; Ethos AI · ethossai.in<br>We only use your answers to improve the products and, if you allow, to quote you.</p>
@@ -221,7 +222,7 @@ canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:7}
 </svg>
 
 <script>
-const ENDPOINT = "https://formsubmit.co/ajax/founder@promethia.live";
+const ENDPOINT = "https://formsubmit.co/ajax/f367fd71cd2bdb0ac95cca4d421210a7";
 const LEVELS=[[0,"Explorer"],[40,"Pathfinder"],[90,"Trailblazer"],[150,"Torchbearer"]];
 const XPS={product:10,rating:15,vibe:10,interest:15,plan:5,role:10,consent:15};
 const TOTAL=7; // answerable steps
@@ -292,18 +293,30 @@ $("#submit").onclick=async()=>{
     _subject:(test||/test/i.test(d.name)?"TEST · ":"")+"Tester feedback: "+(d.rating||"?")+" · "+d.tried+" · "+(d.name||"anon"),
     _template:"table", _captcha:"false", _honey:""
   });
-  const btn=$("#submit"); btn.disabled=true; btn.textContent="Sending…";
+  payload._id=Date.now()+"-"+Math.random().toString(36).slice(2,7);
+  queue(payload); finish(d); deliver(payload);
+};
+function Q(){try{return JSON.parse(localStorage.getItem("tq_queue")||"[]")}catch(_){return[]}}
+function saveQ(q){try{localStorage.setItem("tq_queue",JSON.stringify(q))}catch(_){}}
+function queue(p){const q=Q();q.push(p);saveQ(q)}
+function unqueue(id){saveQ(Q().filter(x=>x._id!==id))}
+const inflight={};
+async function deliver(p,tries=0){
+  if(inflight[p._id])return; inflight[p._id]=1; status("pending");
+  const body=Object.assign({},p); delete body._id; delete body._last;
   try{
-    const r=await fetch(ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(payload)});
+    const r=await fetch(ENDPOINT,{method:"POST",keepalive:true,headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(body)});
     const j=await r.json().catch(()=>({}));
     if(!r.ok||j.success==="false"||j.success===false)throw new Error(j.message||"send failed");
-    finish(d);
+    unqueue(p._id); delete inflight[p._id]; status(Q().length?"pending":"ok");
   }catch(e){
-    try{localStorage.setItem("tq_pending",JSON.stringify(payload))}catch(_){}
-    err.innerHTML="Couldn't send just now. Check your connection and tap again.";err.style.display="block";
-    btn.disabled=false;btn.textContent="Try again 🏅";
+    delete inflight[p._id]; status("retry");
+    if(tries<4)setTimeout(()=>deliver(p,tries+1),8000*(tries+1));
   }
-};
+}
+function status(k){const e=$("#sendst");if(!e)return;
+  e.textContent={pending:"⏳ Delivering your feedback… (you can keep going)",ok:"✓ Delivered to the founder",retry:"⚠️ Saved on this device. Retrying automatically…"}[k];
+  e.dataset.k=k}
 function finish(d){
   addXP("finish",25);
   $("#thx").textContent=d.name?d.name.split(" ")[0]:"tester";
@@ -311,7 +324,17 @@ function finish(d){
   $("#fill").style.width="100%"; show(8); hist=[]; burst(160);
   setTimeout(()=>burst(100),600);
 }
-$("#again").onclick=()=>location.reload();
+function reset(){
+  Object.keys(A).forEach(k=>delete A[k]); xp=0; lv=0; t0=0; hist=[];
+  $("#xp").textContent="0 XP"; $("#lvl").textContent="Lv 1 · Explorer";
+  $$(".sel").forEach(e=>e.classList.remove("sel")); $$("input[type=text],textarea").forEach(e=>e.value="");
+  $("#plans").classList.remove("on"); $("#nameBox").style.display="none";
+  const b=$("#submit"); b.disabled=true; b.textContent="Finish & claim badge 🏅"; show(0);
+}
+$("#again").onclick=reset;
+// resend anything left over from an earlier visit
+setTimeout(()=>Q().forEach(p=>deliver(p)),1500);
+
 
 // confetti
 const cv=$("#cf"),cx=cv.getContext("2d");let P=[],raf=0;
