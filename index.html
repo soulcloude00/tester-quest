@@ -63,6 +63,33 @@ textarea{resize:none;height:76px}
 .lvup div{background:linear-gradient(135deg,var(--orange),var(--gold));color:#fff;font-weight:900;font-size:24px;padding:16px 26px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.4);transform:scale(0);transition:transform .45s cubic-bezier(.3,1.7,.5,1);text-align:center}
 .lvup div small{display:block;font-size:13px;font-weight:700;opacity:.9}
 .lvup.show div{transform:scale(1)}
+.money .chip{padding:12px;min-height:64px;font-size:19px}
+.money .chip small{font-size:12px}
+.done{gap:10px;perspective:900px}
+.done h1{font-size:24px;margin:2px 0 0}
+.unlock{align-self:center;background:linear-gradient(90deg,var(--orange),var(--gold));color:#fff;font-weight:900;font-size:15px;letter-spacing:.04em;padding:7px 16px;border-radius:99px;box-shadow:0 6px 20px rgba(242,107,33,.45);opacity:0;transform:scale(.3)}
+.done.go .unlock{animation:popin .45s cubic-bezier(.3,1.7,.5,1) .05s forwards}
+@keyframes popin{to{opacity:1;transform:none}}
+.bcard{position:relative;overflow:hidden;align-self:center;width:min(300px,100%);border-radius:24px;padding:16px 14px 12px;display:flex;flex-direction:column;align-items:center;
+background:linear-gradient(160deg,#243a6b,#14213f);border:2px solid rgba(232,184,74,.7);box-shadow:0 14px 40px rgba(0,0,0,.45),inset 0 0 0 4px rgba(255,255,255,.03);opacity:0;transform-origin:50% 0}
+.done.go .bcard{animation:dropflip .8s cubic-bezier(.2,1.3,.4,1) .15s forwards}
+@keyframes dropflip{0%{opacity:0;transform:translateY(-70px) rotateX(75deg) scale(.8)}60%{opacity:1}100%{opacity:1;transform:none}}
+.medal{width:132px;height:132px;display:block;filter:drop-shadow(0 0 0 rgba(232,184,74,0))}
+.done.go .medal{animation:glow 1.8s ease-in-out .9s infinite alternate,spin .9s cubic-bezier(.3,1.3,.5,1) .15s both}
+@keyframes glow{to{filter:drop-shadow(0 0 16px rgba(242,170,60,.75))}}
+@keyframes spin{from{transform:rotateY(180deg) scale(.6)}to{transform:none}}
+#ring{transition:stroke-dashoffset 1.1s cubic-bezier(.3,.9,.4,1) .7s}
+.shine{position:absolute;top:-20%;left:-60%;width:40%;height:140%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);pointer-events:none}
+.done.go .shine{animation:sweep 1s ease-in-out 1.05s}
+@keyframes sweep{to{left:130%}}
+.btitle{font-weight:900;letter-spacing:.18em;font-size:13px;color:var(--gold);margin-top:6px}
+.bname{font-size:20px;font-weight:800;margin-top:2px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bmeta{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:6px;width:100%;margin-top:10px}
+.bmeta div{background:rgba(255,255,255,.07);border-radius:12px;padding:7px 4px;text-align:center}
+.bmeta b{display:block;font-size:16px;color:var(--ivory)}
+.bmeta span{font-size:10.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.bmeta i{font-style:normal}
+.bfoot{font-size:11px;color:var(--muted);margin-top:9px}
 .badge{width:150px;height:150px;margin:6px auto 0;position:relative;animation:pop .8s cubic-bezier(.3,1.6,.5,1)}
 @keyframes pop{from{transform:scale(0) rotate(-30deg)}to{transform:none}}
 .done{text-align:center;align-items:center}
@@ -134,24 +161,19 @@ canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:7}
       </div>
     </section>
 
-    <!-- 4 interest -->
+    <!-- 4 price -->
     <section class="step" data-s="4">
-      <div class="guide"><svg class="spark"><use href="#flame"/></svg><div class="bubble">No payment here. Just tell us if it's worth it.</div></div>
-      <h1>Would you <em>use or pay</em> for this?</h1>
-      <div class="opts" data-q="interest">
-        <button class="chip" data-v="Yes, I'd pay"><span class="ic">💸</span>Yes, I'd pay</button>
-        <button class="chip" data-v="Free only"><span class="ic">🆓</span>I'd use it, free only</button>
-        <button class="chip" data-v="Not for me"><span class="ic">🙅</span>Not for me</button>
+      <div class="guide"><svg class="spark"><use href="#flame"/></svg><div class="bubble">No payment here. Just pick what feels fair to you.</div></div>
+      <h1>How much would you <em>pay</em> if an app like this existed?</h1>
+      <div class="opts two money" data-q="price" data-auto>
+        <button class="chip" data-v="₹0 (free only)"><span class="ic">🆓</span><div>₹0<small>free only</small></div></button>
+        <button class="chip" data-v="₹99/month"><span class="ic">🪙</span><div>₹99<small>per month</small></div></button>
+        <button class="chip" data-v="₹149/month"><span class="ic">💳</span><div>₹149<small>per month</small></div></button>
+        <button class="chip" data-v="₹599/6 months"><span class="ic">📦</span><div>₹599<small>for 6 months</small></div></button>
+        <button class="chip" data-v="₹999/year"><span class="ic">🎯</span><div>₹999<small>per year</small></div></button>
+        <button class="chip" data-v="More than ₹999/year"><span class="ic">🚀</span><div>₹999+<small>more per year</small></div></button>
       </div>
-      <div class="plans" id="plans">
-        <p class="sub" style="color:var(--gold);font-weight:700">Ethos AI: which plan feels right? (optional)</p>
-        <div class="opts" data-q="plan" data-auto>
-          <button class="chip" data-v="₹149/month">₹149 / month</button>
-          <button class="chip" data-v="₹599/6 months">₹599 / 6 months</button>
-          <button class="chip" data-v="₹999/year">₹999 / year<span class="tag">best value</span></button>
-        </div>
-        <button class="ghost" data-next>Skip</button>
-      </div>
+      <p class="sub" style="font-size:12.5px;text-align:center">Tap one to continue</p>
     </section>
 
     <!-- 5 role -->
@@ -195,18 +217,33 @@ canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:7}
 
     <!-- 8 done -->
     <section class="step done" data-s="8">
-      <svg class="badge" viewBox="0 0 120 120" aria-label="Founding Tester badge">
-        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f26b21"/><stop offset="1" stop-color="#e8b84a"/></linearGradient></defs>
-        <path d="M60 4l14 10 17-1 6 16 14 9-4 17 6 16-12 12-2 17-17 4-11 13-11-13-17-4-2-17-12-12 6-16-4-17 14-9 6-16 17 1z" fill="url(#g)"/>
-        <circle cx="60" cy="60" r="38" fill="#1a2a4f" stroke="#fbf6ea" stroke-width="2"/>
-        <use href="#flame" x="36" y="26" width="48" height="48"/>
-        <text x="60" y="88" text-anchor="middle" font-size="7.2" font-weight="900" fill="#e8b84a" letter-spacing=".6">FOUNDING TESTER</text>
-      </svg>
-      <span class="hint" style="align-self:center">🏅 Badge unlocked</span>
+      <div class="unlock" id="unlock">🏅 Badge unlocked!</div>
+      <div class="bcard" id="bcard">
+        <div class="shine"></div>
+        <svg class="medal" viewBox="0 0 160 160" aria-label="Founding Tester badge">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f26b21"/><stop offset="1" stop-color="#e8b84a"/></linearGradient>
+            <radialGradient id="gi" cx=".5" cy=".4" r=".6"><stop offset="0" stop-color="#2c4580"/><stop offset="1" stop-color="#1a2a4f"/></radialGradient>
+          </defs>
+          <polygon points="80.0,4.0 92.9,15.3 109.1,9.8 116.7,25.1 133.7,26.3 134.9,43.3 150.2,50.9 144.7,67.1 156.0,80.0 144.7,92.9 150.2,109.1 134.9,116.7 133.7,133.7 116.7,134.9 109.1,150.2 92.9,144.7 80.0,156.0 67.1,144.7 50.9,150.2 43.3,134.9 26.3,133.7 25.1,116.7 9.8,109.1 15.3,92.9 4.0,80.0 15.3,67.1 9.8,50.9 25.1,43.3 26.3,26.3 43.3,25.1 50.9,9.8 67.1,15.3" fill="url(#g)"/>
+          <circle cx="80" cy="80" r="58" fill="url(#gi)" stroke="#fbf6ea" stroke-width="2.5"/>
+          <circle cx="80" cy="80" r="49" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="7"/>
+          <circle id="ring" cx="80" cy="80" r="49" fill="none" stroke="url(#g)" stroke-width="7" stroke-linecap="round" stroke-dasharray="307.9" stroke-dashoffset="307.9" transform="rotate(-90 80 80)"/>
+          <use href="#flame" x="54" y="42" width="52" height="52"/>
+          <text x="80" y="112" text-anchor="middle" font-size="13" font-weight="900" fill="#e8b84a" letter-spacing="1">LV <tspan id="blv">1</tspan></text>
+        </svg>
+        <div class="btitle">FOUNDING TESTER</div>
+        <div class="bname" id="bname">Tester</div>
+        <div class="bmeta">
+          <div><b id="fxp">0</b><span>XP</span></div>
+          <div><b id="flvn">Explorer</b><span>Level <i id="flv">1</i></span></div>
+          <div><b id="ftime">0s</b><span>Time</span></div>
+        </div>
+        <div class="bfoot"><span id="btried">Promethia × Ethos AI</span> · early tester</div>
+      </div>
       <h1>Thank you, <em id="thx">tester</em>!</h1>
-      <p class="sub">Your feedback went straight to the founder. You're one of the first people to try this, and it shapes what we build next.</p>
-      <div class="stats"><div><b id="fxp">0</b>XP earned</div><div><b id="flv">3</b>Level</div><div><b id="ftime">0s</b>Your time</div></div>
-      <p class="sub" id="sendst" style="font-size:13px;font-weight:700;color:var(--gold)"></p>
+      <p class="sub">Your feedback went straight to the founder and shapes what we build next.</p>
+      <p class="sub" id="sendst" style="font-size:13px;font-weight:700;color:var(--gold);margin:0"></p>
       <button class="ghost" id="again">Next person? Start a fresh quest</button>
     </section>
   </main>
@@ -224,7 +261,8 @@ canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:7}
 <script>
 const ENDPOINT = "https://formsubmit.co/ajax/f367fd71cd2bdb0ac95cca4d421210a7";
 const LEVELS=[[0,"Explorer"],[40,"Pathfinder"],[90,"Trailblazer"],[150,"Torchbearer"]];
-const XPS={product:10,rating:15,vibe:10,interest:15,plan:5,role:10,consent:15};
+const XPS={product:10,rating:15,vibe:10,price:15,role:10,consent:15};
+const MAXXP=150;
 const TOTAL=7; // answerable steps
 const A={}; let step=0, xp=0, lv=0, t0=0, hist=[];
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -255,11 +293,6 @@ $$("[data-q]").forEach(g=>{
   g.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{
     g.querySelectorAll("[data-v]").forEach(x=>x.classList.remove("sel")); b.classList.add("sel");
     A[q]=b.dataset.v; addXP(q,XPS[q]||10);
-    if(q==="interest"){
-      const ethos=A.product&&A.product!=="Promethia games";
-      if(ethos&&A.interest==="Yes, I'd pay"){$("#plans").classList.add("on");return}
-      $("#plans").classList.remove("on"); delete A.plan; setTimeout(()=>go(5),380); return;
-    }
     if(q==="consent"){
       $("#nameBox").style.display=A.consent==="Quote me with my name"?"flex":"none";
       $("#submit").disabled=false; return;
@@ -281,7 +314,7 @@ $("#submit").onclick=async()=>{
   const d={
     name:$("#name").value.trim(), role:A.role||"", college_course:$("#college").value.trim(),
     tried:A.product||"", rating:A.rating?A.rating+"/5":"", vibe:A.vibe||"",
-    would_pay:A.interest||"", ethos_plan_pick:A.plan||"",
+    price_would_pay:A.price||"",
     testimonial:$("#quote").value.trim(), one_fix:$("#fix").value.trim(),
     quote_consent:A.consent||"", xp:xp, seconds_taken:secs,
     submitted_at:new Date().toISOString()
@@ -290,7 +323,7 @@ $("#submit").onclick=async()=>{
   const csv=v=>'"'+String(v).replace(/"/g,'""')+'"';
   const payload=Object.assign({},d,{
     csv_header:cols.join(","), csv_row:cols.map(k=>csv(d[k])).join(","),
-    _subject:(test||/test/i.test(d.name)?"TEST · ":"")+"Tester feedback: "+(d.rating||"?")+" · "+d.tried+" · "+(d.name||"anon"),
+    _subject:(test||/test/i.test(d.name)?"TEST · ":"")+"Tester feedback: "+(d.rating||"?")+" · pays "+(d.price_would_pay||"?")+" · "+d.tried+" · "+(d.name||"anon"),
     _template:"table", _captcha:"false", _honey:""
   });
   payload._id=Date.now()+"-"+Math.random().toString(36).slice(2,7);
@@ -318,18 +351,28 @@ function status(k){const e=$("#sendst");if(!e)return;
   e.textContent={pending:"⏳ Delivering your feedback… (you can keep going)",ok:"✓ Delivered to the founder",retry:"⚠️ Saved on this device. Retrying automatically…"}[k];
   e.dataset.k=k}
 function finish(d){
-  addXP("finish",25);
+  addXP("finish",25); $("#toast").classList.remove("show"); $("#lvup").classList.remove("show");
+  const sec=$("section[data-s='8']");
   $("#thx").textContent=d.name?d.name.split(" ")[0]:"tester";
-  $("#fxp").textContent=xp; $("#flv").textContent=lv+1; $("#ftime").textContent=d.seconds_taken+"s";
-  $("#fill").style.width="100%"; show(8); hist=[]; burst(160);
-  setTimeout(()=>burst(100),600);
+  $("#bname").textContent=d.name&&A.consent==="Quote me with my name"?d.name:(d.role?d.role+" tester":"Early tester");
+  $("#btried").textContent=d.tried||"Promethia × Ethos AI";
+  $("#blv").textContent=lv+1; $("#flv").textContent=lv+1; $("#flvn").textContent=LEVELS[lv][1];
+  $("#ftime").textContent=d.seconds_taken+"s"; $("#fxp").textContent="0";
+  $("#ring").style.strokeDashoffset="307.9";
+  $("#fill").style.width="100%"; show(8); hist=[];
+  sec.classList.remove("go"); void sec.offsetWidth; sec.classList.add("go");
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{$("#ring").style.strokeDashoffset=(307.9*(1-Math.min(1,xp/MAXXP))).toFixed(1)}));
+  const end=xp,t1=performance.now()+500,dur=900;
+  (function up(now){const k=Math.max(0,Math.min(1,(now-t1)/dur));$("#fxp").textContent=Math.round(end*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(up)})(performance.now());
+  setTimeout(()=>{burst(150);if(navigator.vibrate)navigator.vibrate([20,40,30])},750);
+  setTimeout(()=>burst(80),1400);
 }
 function reset(){
   Object.keys(A).forEach(k=>delete A[k]); xp=0; lv=0; t0=0; hist=[];
   $("#xp").textContent="0 XP"; $("#lvl").textContent="Lv 1 · Explorer";
   $$(".sel").forEach(e=>e.classList.remove("sel")); $$("input[type=text],textarea").forEach(e=>e.value="");
-  $("#plans").classList.remove("on"); $("#nameBox").style.display="none";
-  const b=$("#submit"); b.disabled=true; b.textContent="Finish & claim badge 🏅"; show(0);
+  $("#nameBox").style.display="none";
+  $("section[data-s='8']").classList.remove("go"); const b=$("#submit"); b.disabled=true; b.textContent="Finish & claim badge 🏅"; show(0);
 }
 $("#again").onclick=reset;
 // resend anything left over from an earlier visit
