@@ -316,7 +316,7 @@ $("#submit").onclick=async()=>{
     tried:A.product||"", rating:A.rating?A.rating+"/5":"", vibe:A.vibe||"",
     price_would_pay:A.price||"",
     testimonial:$("#quote").value.trim(), one_fix:$("#fix").value.trim(),
-    quote_consent:A.consent||"", xp:xp, seconds_taken:secs,
+    quote_consent:A.consent||"", xp:xp+(A._xp_finish?0:25), seconds_taken:secs,
     submitted_at:new Date().toISOString()
   };
   const cols=Object.keys(d);
