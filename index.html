@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tester Quest · Promethia × Ethos AI</title>
+<meta name="description" content="A 45-second feedback quest for Promethia games and Ethos AI testers.">
+<meta name="theme-color" content="#1a2a4f">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+<style>
+:root{--navy:#1a2a4f;--navy2:#0f1a33;--orange:#f26b21;--gold:#e8b84a;--ivory:#fbf6ea;--muted:#aab4cc;--card:#22345f}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ivory);
+background:radial-gradient(120% 70% at 50% -10%,#2a3f72 0%,var(--navy) 45%,var(--navy2) 100%);min-height:100dvh;overflow-x:hidden}
+.app{max-width:480px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:14px 18px calc(18px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;gap:10px}
+.lvl{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+.bar{flex:1;height:12px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;position:relative}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--orange),var(--gold));border-radius:99px;transition:width .5s cubic-bezier(.3,1.4,.5,1)}
+.xp{font-size:12px;font-weight:800;color:var(--ivory);min-width:52px;text-align:right}
+.back{background:none;border:0;color:var(--muted);font-size:22px;padding:0 4px;cursor:pointer;visibility:hidden}
+.stage{flex:1;position:relative;display:flex;flex-direction:column;justify-content:center}
+.step{display:none;flex-direction:column;gap:14px;animation:in .35s ease}
+.step.on{display:flex}
+@keyframes in{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+.guide{display:flex;gap:10px;align-items:flex-end}
+.spark{width:44px;height:44px;flex:none;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-4px) rotate(-3deg)}}
+.bubble{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:9px 12px;border-radius:14px 14px 14px 4px;font-size:14px;color:var(--ivory);line-height:1.35}
+h1{font-size:26px;line-height:1.2;margin:4px 0 0;font-weight:800}
+h1 em{font-style:normal;color:var(--orange)}
+.sub{color:var(--muted);font-size:14px;margin:0}
+.opts{display:grid;gap:10px}
+.opts.two{grid-template-columns:1fr 1fr}
+.chip{appearance:none;border:2px solid rgba(255,255,255,.14);background:var(--card);color:var(--ivory);border-radius:16px;padding:16px 14px;font-size:17px;font-weight:700;text-align:left;display:flex;align-items:center;gap:12px;cursor:pointer;transition:transform .12s,border-color .2s,background .2s;min-height:60px;font-family:inherit}
+.chip .ic{font-size:26px;line-height:1}
+.chip small{display:block;font-weight:500;font-size:12.5px;color:var(--muted);margin-top:2px}
+.chip:active{transform:scale(.96)}
+.chip.sel{border-color:var(--orange);background:linear-gradient(135deg,rgba(242,107,33,.25),rgba(232,184,74,.12))}
+.emojis{display:flex;justify-content:space-between;gap:6px}
+.emo{appearance:none;flex:1;aspect-ratio:1;border-radius:18px;border:2px solid rgba(255,255,255,.14);background:var(--card);font-size:34px;cursor:pointer;transition:transform .15s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--ivory);font-family:inherit}
+.emo span{font-size:10.5px;font-weight:700;color:var(--muted)}
+.emo:active,.emo.sel{transform:scale(1.12)}
+.emo.sel{border-color:var(--gold);background:rgba(232,184,74,.18)}
+label.f{font-size:13px;font-weight:700;color:var(--gold);display:block;margin-bottom:6px}
+input[type=text],textarea{width:100%;background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.14);color:var(--ivory);border-radius:14px;padding:13px 14px;font-size:16px;font-family:inherit;outline:none;transition:border-color .2s}
+input:focus,textarea:focus{border-color:var(--orange)}
+textarea{resize:none;height:76px}
+::placeholder{color:#7f8aa6}
+.cta{appearance:none;border:0;border-radius:16px;padding:17px;font-size:18px;font-weight:800;background:linear-gradient(90deg,var(--orange),#f58a3a);color:#fff;cursor:pointer;box-shadow:0 8px 24px rgba(242,107,33,.35);font-family:inherit;transition:transform .12s}
+.cta:active{transform:scale(.97)}
+.cta:disabled{opacity:.6}
+.ghost{background:none;border:0;color:var(--muted);font-size:14px;text-decoration:underline;cursor:pointer;padding:6px;font-family:inherit}
+.hint{display:inline-flex;align-items:center;gap:6px;background:rgba(232,184,74,.15);color:var(--gold);font-weight:800;font-size:13px;padding:6px 12px;border-radius:99px;align-self:flex-start}
+.plans{display:none;flex-direction:column;gap:8px;margin-top:4px;animation:in .3s}
+.plans.on{display:flex}
+.plans .chip{padding:12px 14px;min-height:50px;font-size:15.5px}
+.tag{font-size:11px;font-weight:800;color:var(--navy);background:var(--gold);border-radius:6px;padding:2px 6px;margin-left:auto}
+.toast{position:fixed;left:50%;top:70px;transform:translateX(-50%) scale(.6);opacity:0;background:var(--gold);color:var(--navy);font-weight:900;padding:8px 16px;border-radius:99px;font-size:15px;pointer-events:none;transition:all .35s cubic-bezier(.3,1.6,.5,1);z-index:9;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) scale(1)}
+.lvup{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:8}
+.lvup div{background:linear-gradient(135deg,var(--orange),var(--gold));color:#fff;font-weight:900;font-size:24px;padding:16px 26px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.4);transform:scale(0);transition:transform .45s cubic-bezier(.3,1.7,.5,1);text-align:center}
+.lvup div small{display:block;font-size:13px;font-weight:700;opacity:.9}
+.lvup.show div{transform:scale(1)}
+.badge{width:150px;height:150px;margin:6px auto 0;position:relative;animation:pop .8s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{from{transform:scale(0) rotate(-30deg)}to{transform:none}}
+.done{text-align:center;align-items:center}
+.done h1{font-size:28px}
+.stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.stats div{background:var(--card);border-radius:14px;padding:10px 14px;font-size:12px;color:var(--muted);font-weight:700}
+.stats b{display:block;color:var(--gold);font-size:20px}
+.err{color:#ffb4a0;font-size:13.5px;display:none}
+.foot{text-align:center;font-size:11.5px;color:#7f8aa6;margin-top:10px}
+canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:7}
+.hp{position:absolute;left:-9999px}
+</style>
+</head>
+<body>
+<canvas id="cf"></canvas>
+<div class="toast" id="toast">+10 XP</div>
+<div class="lvup" id="lvup"><div id="lvtxt">Level up!</div></div>
+<div class="app">
+  <header>
+    <button class="back" id="back" aria-label="Back">‹</button>
+    <span class="lvl" id="lvl">Lv 1 · Explorer</span>
+    <div class="bar"><div class="fill" id="fill"></div></div>
+    <span class="xp" id="xp">0 XP</span>
+  </header>
+
+  <main class="stage">
+    <!-- 0 intro -->
+    <section class="step on" data-s="0">
+      <svg class="badge" viewBox="0 0 120 120" aria-hidden="true" style="width:110px;height:110px"><use href="#flame"/></svg>
+      <span class="hint">⏱ takes ~45 sec · 7 taps</span>
+      <h1>You tried it first.<br>Now tell us <em>straight</em>.</h1>
+      <p class="sub">Quick feedback on <b>Promethia games</b> or <b>Ethos AI</b>. Mostly one tap per question. Earn XP and unlock your Founding Tester badge.</p>
+      <button class="cta" data-next>Start the quest →</button>
+    </section>
+
+    <!-- 1 what -->
+    <section class="step" data-s="1">
+      <div class="guide"><svg class="spark"><use href="#flame"/></svg><div class="bubble">First up, what did you try?</div></div>
+      <h1>What did you <em>try</em>?</h1>
+      <div class="opts" data-q="product" data-auto>
+        <button class="chip" data-v="Promethia games"><span class="ic">🎲</span><div>Promethia games<small>hands-on learning games</small></div></button>
+        <button class="chip" data-v="Ethos AI"><span class="ic">🌙</span><div>Ethos AI<small>lo-fi anime micro-learning</small></div></button>
+        <button class="chip" data-v="Both"><span class="ic">✨</span><div>Both</div></button>
+      </div>
+    </section>
+
+    <!-- 2 rating -->
+    <section class="step" data-s="2">
+      <div class="guide"><svg class="spark"><use href="#flame"/></svg><div class="bubble">Be honest. A 2 helps us as much as a 5.</div></div>
+      <h1>How was it <em>overall</em>?</h1>
+      <div class="emojis" data-q="rating" data-auto>
+        <button class="emo" data-v="1">😖<span>Meh</span></button>
+        <button class="emo" data-v="2">😕<span>Okay-ish</span></button>
+        <button class="emo" data-v="3">🙂<span>Decent</span></button>
+        <button class="emo" data-v="4">😄<span>Good</span></button>
+        <button class="emo" data-v="5">🤩<span>Loved it</span></button>
+      </div>
+    </section>
+
+    <!-- 3 vibe -->
+    <section class="step" data-s="3">
+      <div class="guide"><svg class="spark"><use href="#flame"/></svg><div class="bubble">Gut feeling. One word.</div></div>
+      <h1>What was the <em>vibe</em>?</h1>
+      <div class="opts two" data-q="vibe" data-auto>
+        <button class="chip" data-v="Fun"><span class="ic">🎉</span>Fun</button>
+        <button class="chip" data-v="Useful"><span class="ic">🧠</span>Useful</button>
+        <button class="chip" data-v="Calm"><span class="ic">🍃</span>Calm</button>
+        <button class="chip" data-v="Confusing"><span class="ic">🌀</span>Confusing</button>
+      </div>
+    </section>
+
+    <!-- 4 interest -->
+    <section class="step" data-s="4">
+      <div class="guide"><svg class="spark"><use href="#flame"/></svg><div class="bubble">No payment here. Just tell us if it's worth it.</div></div>
+      <h1>Would you <em>use or pay</em> for this?</h1>
+      <div class="opts" data-q="interest">
+        <button class="chip" data-v="Yes, I'd pay"><span class="ic">💸</span>Yes, I'd pay</button>
+        <button class="chip" data-v="Free only"><span class="ic">🆓</span>I'd use it, free only</button>
+        <button class="chip" data-v="Not for me"><span class="ic">🙅</span>Not for me</button>
+      </div>
+      <div class="plans" id="plans">
+        <p class="sub" style="color:var(--gold);font-weight:700">Ethos AI: which plan feels right? (optional)</p>
+        <div class="opts" data-q="plan" data-auto>
+          <button class="chip" data-v="₹149/month">₹149 / month</button>
+          <button class="chip" data-v="₹599/6 months">₹599 / 6 months</button>
+          <button class="chip" data-v="₹999/year">₹999 / year<span class="tag">best value</span></button>
+        </div>
+        <button class="ghost" data-next>Skip</button>
+      </div>
+    </section>
+
+    <!-- 5 role -->
+    <section class="step" data-s="5">
+      <div class="guide"><svg class="spark"><use href="#flame"/></svg><div class="bubble">Almost there. Who's playing?</div></div>
+      <h1>You are a…</h1>
+      <div class="opts" data-q="role" data-auto>
+        <button class="chip" data-v="Student"><span class="ic">🎓</span>Student</button>
+        <button class="chip" data-v="Teacher"><span class="ic">📚</span>Teacher</button>
+        <button class="chip" data-v="Other"><span class="ic">👋</span>Something else</button>
+      </div>
+    </section>
+
+    <!-- 6 words -->
+    <section class="step" data-s="6">
+      <div class="guide"><svg class="spark"><use href="#flame"/></svg><div class="bubble">Bonus XP round. Both optional, one line each.</div></div>
+      <div><label class="f" for="quote">💬 Say it in one line (+30 XP)</label>
+      <textarea id="quote" maxlength="240" placeholder="e.g. Felt like a game, but I actually learned something."></textarea></div>
+      <div><label class="f" for="fix">🔧 One thing to fix? (+20 XP)</label>
+      <input type="text" id="fix" maxlength="200" placeholder="Anything that felt off or slow"></div>
+      <button class="cta" id="wordsNext">Next →</button>
+    </section>
+
+    <!-- 7 consent -->
+    <section class="step" data-s="7">
+      <div class="guide"><svg class="spark"><use href="#flame"/></svg><div class="bubble">Last tap. Your words, your call.</div></div>
+      <h1>Can we <em>quote</em> you?</h1>
+      <div class="opts" data-q="consent">
+        <button class="chip" data-v="Quote me with my name"><span class="ic">🙋</span>Yes, with my name</button>
+        <button class="chip" data-v="Quote me anonymously"><span class="ic">🕶️</span>Yes, anonymously</button>
+        <button class="chip" data-v="Don't quote me"><span class="ic">🤐</span>Don't quote me</button>
+      </div>
+      <div id="nameBox" style="display:none;flex-direction:column;gap:8px">
+        <input type="text" id="name" maxlength="80" placeholder="Your name" autocomplete="name">
+        <input type="text" id="college" maxlength="120" placeholder="College / course (optional)">
+      </div>
+      <input class="hp" type="text" id="honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <p class="err" id="err"></p>
+      <button class="cta" id="submit" disabled>Finish & claim badge 🏅</button>
+    </section>
+
+    <!-- 8 done -->
+    <section class="step done" data-s="8">
+      <svg class="badge" viewBox="0 0 120 120" aria-label="Founding Tester badge">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f26b21"/><stop offset="1" stop-color="#e8b84a"/></linearGradient></defs>
+        <path d="M60 4l14 10 17-1 6 16 14 9-4 17 6 16-12 12-2 17-17 4-11 13-11-13-17-4-2-17-12-12 6-16-4-17 14-9 6-16 17 1z" fill="url(#g)"/>
+        <circle cx="60" cy="60" r="38" fill="#1a2a4f" stroke="#fbf6ea" stroke-width="2"/>
+        <use href="#flame" x="36" y="26" width="48" height="48"/>
+        <text x="60" y="88" text-anchor="middle" font-size="7.2" font-weight="900" fill="#e8b84a" letter-spacing=".6">FOUNDING TESTER</text>
+      </svg>
+      <span class="hint" style="align-self:center">🏅 Badge unlocked</span>
+      <h1>Thank you, <em id="thx">tester</em>!</h1>
+      <p class="sub">Your feedback went straight to the founder. You're one of the first people to try this, and it shapes what we build next.</p>
+      <div class="stats"><div><b id="fxp">0</b>XP earned</div><div><b id="flv">3</b>Level</div><div><b id="ftime">0s</b>Your time</div></div>
+      <button class="ghost" id="again">Submit another response</button>
+    </section>
+  </main>
+  <p class="foot">Promethia · promethia.live &nbsp;·&nbsp; Ethos AI · ethossai.in<br>We only use your answers to improve the products and, if you allow, to quote you.</p>
+</div>
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="flame" viewBox="0 0 48 48">
+    <path d="M24 3c3 8 12 12 12 24a12 12 0 0 1-24 0c0-6 3-9 5-11 0 4 2 6 4 6-2-7 1-14 3-19z" fill="#f26b21"/>
+    <path d="M24 22c2 4 6 6 6 11a6 6 0 0 1-12 0c0-3 2-5 3-6 0 2 1 3 2 3-1-3 0-6 1-8z" fill="#e8b84a"/>
+    <circle cx="21.5" cy="33" r="1.3" fill="#1a2a4f"/><circle cx="26.5" cy="33" r="1.3" fill="#1a2a4f"/>
+  </symbol>
+</svg>
+
+<script>
+const ENDPOINT = "https://formsubmit.co/ajax/founder@promethia.live";
+const LEVELS=[[0,"Explorer"],[40,"Pathfinder"],[90,"Trailblazer"],[150,"Torchbearer"]];
+const XPS={product:10,rating:15,vibe:10,interest:15,plan:5,role:10,consent:15};
+const TOTAL=7; // answerable steps
+const A={}; let step=0, xp=0, lv=0, t0=0, hist=[];
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const steps=$$(".step");
+const test=/[?&]test=1/.test(location.search);
+
+function show(n){
+  steps.forEach(s=>s.classList.toggle("on",+s.dataset.s===n));
+  step=n; $("#back").style.visibility=(n>0&&n<8)?"visible":"hidden";
+  $("#fill").style.width=Math.min(100,Math.round((n/TOTAL)*100))+"%";
+  window.scrollTo(0,0);
+}
+function go(n){hist.push(step);show(n)}
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("show"),900)}
+function addXP(k,amt){
+  if(A["_xp_"+k])return; A["_xp_"+k]=1; xp+=amt; $("#xp").textContent=xp+" XP"; toast("+"+amt+" XP");
+  let nl=0; LEVELS.forEach((l,i)=>{if(xp>=l[0])nl=i});
+  if(nl>lv){lv=nl;$("#lvl").textContent="Lv "+(lv+1)+" · "+LEVELS[lv][1];
+    $("#lvtxt").innerHTML="Level "+(lv+1)+"!<small>"+LEVELS[lv][1]+" unlocked</small>";
+    $("#lvup").classList.add("show");burst(40);setTimeout(()=>$("#lvup").classList.remove("show"),1100);}
+  if(navigator.vibrate)navigator.vibrate(15);
+}
+$$("[data-next]").forEach(b=>b.onclick=()=>{if(step===0)t0=Date.now();go(step+1)});
+$("#back").onclick=()=>{if(hist.length)show(hist.pop())};
+
+$$("[data-q]").forEach(g=>{
+  const q=g.dataset.q;
+  g.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{
+    g.querySelectorAll("[data-v]").forEach(x=>x.classList.remove("sel")); b.classList.add("sel");
+    A[q]=b.dataset.v; addXP(q,XPS[q]||10);
+    if(q==="interest"){
+      const ethos=A.product&&A.product!=="Promethia games";
+      if(ethos&&A.interest==="Yes, I'd pay"){$("#plans").classList.add("on");return}
+      $("#plans").classList.remove("on"); delete A.plan; setTimeout(()=>go(5),380); return;
+    }
+    if(q==="consent"){
+      $("#nameBox").style.display=A.consent==="Quote me with my name"?"flex":"none";
+      $("#submit").disabled=false; return;
+    }
+    if(g.hasAttribute("data-auto")) setTimeout(()=>go(step+1),380);
+  });
+});
+$("#wordsNext").onclick=()=>{
+  if($("#quote").value.trim())addXP("quote",30);
+  if($("#fix").value.trim())addXP("fix",20);
+  go(7);
+};
+
+$("#submit").onclick=async()=>{
+  const err=$("#err"); err.style.display="none";
+  if(A.consent==="Quote me with my name"&&!$("#name").value.trim()){err.textContent="Add your name so we can credit you (or pick anonymous).";err.style.display="block";$("#name").focus();return}
+  if($("#honey").value)return;
+  const secs=Math.round((Date.now()-(t0||Date.now()))/1000);
+  const d={
+    name:$("#name").value.trim(), role:A.role||"", college_course:$("#college").value.trim(),
+    tried:A.product||"", rating:A.rating?A.rating+"/5":"", vibe:A.vibe||"",
+    would_pay:A.interest||"", ethos_plan_pick:A.plan||"",
+    testimonial:$("#quote").value.trim(), one_fix:$("#fix").value.trim(),
+    quote_consent:A.consent||"", xp:xp, seconds_taken:secs,
+    submitted_at:new Date().toISOString()
+  };
+  const cols=Object.keys(d);
+  const csv=v=>'"'+String(v).replace(/"/g,'""')+'"';
+  const payload=Object.assign({},d,{
+    csv_header:cols.join(","), csv_row:cols.map(k=>csv(d[k])).join(","),
+    _subject:(test||/test/i.test(d.name)?"TEST · ":"")+"Tester feedback: "+(d.rating||"?")+" · "+d.tried+" · "+(d.name||"anon"),
+    _template:"table", _captcha:"false", _honey:""
+  });
+  const btn=$("#submit"); btn.disabled=true; btn.textContent="Sending…";
+  try{
+    const r=await fetch(ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(payload)});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok||j.success==="false"||j.success===false)throw new Error(j.message||"send failed");
+    finish(d);
+  }catch(e){
+    try{localStorage.setItem("tq_pending",JSON.stringify(payload))}catch(_){}
+    err.innerHTML="Couldn't send just now. Check your connection and tap again.";err.style.display="block";
+    btn.disabled=false;btn.textContent="Try again 🏅";
+  }
+};
+function finish(d){
+  addXP("finish",25);
+  $("#thx").textContent=d.name?d.name.split(" ")[0]:"tester";
+  $("#fxp").textContent=xp; $("#flv").textContent=lv+1; $("#ftime").textContent=d.seconds_taken+"s";
+  $("#fill").style.width="100%"; show(8); hist=[]; burst(160);
+  setTimeout(()=>burst(100),600);
+}
+$("#again").onclick=()=>location.reload();
+
+// confetti
+const cv=$("#cf"),cx=cv.getContext("2d");let P=[],raf=0;
+function rs(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio}rs();addEventListener("resize",rs);
+function burst(n){const C=["#f26b21","#e8b84a","#fbf6ea","#5b8cff"];
+  for(let i=0;i<n;i++)P.push({x:cv.width/2,y:cv.height*.35,vx:(Math.random()-.5)*16*devicePixelRatio,vy:(-Math.random()*14-4)*devicePixelRatio,s:(4+Math.random()*5)*devicePixelRatio,c:C[i%4],r:Math.random()*6,life:120});
+  if(!raf)tick()}
+function tick(){cx.clearRect(0,0,cv.width,cv.height);
+  P.forEach(p=>{p.vy+=.45*devicePixelRatio;p.x+=p.vx;p.y+=p.vy;p.vx*=.98;p.r+=.2;p.life--;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);cx.restore()});
+  P=P.filter(p=>p.life>0&&p.y<cv.height+50);raf=P.length?requestAnimationFrame(tick):0}
+</script>
+</body>
+</html>
